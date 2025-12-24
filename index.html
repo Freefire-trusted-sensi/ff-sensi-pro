@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FF Sensi Pro</title>
+
+<!-- ================= CSS ================= -->
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+  }
+
+  /* Screens */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 30px;
+    text-align: center;
+  }
+  .active {
+    display: block;
+  }
+
+  /* Headings */
+  h1, h2 {
+    color: red;
+    text-shadow: 0 0 15px red;
+  }
+
+  /* Inputs */
+  input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #111;
+    color: white;
+    border: 1px solid red;
+    border-radius: 8px;
+  }
+
+  /* Buttons */
+  button {
+    width: 95%;
+    padding: 12px;
+    margin-top: 10px;
+    background: red;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 0 15px red;
+    cursor: pointer;
+  }
+
+  .google {
+    background: black;
+    color: red;
+    border: 1px solid red;
+  }
+
+  /* Card */
+  .card {
+    background: rgba(0,0,0,0.7);
+    padding: 15px;
+    border: 1px solid red;
+    box-shadow: 0 0 10px red;
+    border-radius: 10px;
+    margin: 15px;
+  }
+
+  /* Menu button */
+  .menu {
+    text-align: left;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  /* Result */
+  #result {
+    margin-top: 15px;
+    white-space: pre-line;
+  }
+
+  /* Side menu */
+  #sideMenu {
+    position: fixed;
+    top: 0;
+    left: -220px;
+    width: 200px;
+    height: 100%;
+    background: black;
+    border-right: 2px solid red;
+    box-shadow: 0 0 20px red;
+    padding: 20px;
+    transition: 0.3s;
+  }
+
+  #sideMenu p {
+    color: red;
+    margin: 20px 0;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN SCREEN ================= -->
+<div id="login" class="screen active">
+  <h1>🔥 FF Sensi Pro</h1>
+
+  <button class="google" onclick="googleLogin()">Continue with Google</button>
+
+  <input type="text" placeholder="Username">
+  <input type="password" placeholder="Password">
+
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- ================= HOME SCREEN ================= -->
+<div id="home" class="screen">
+  <div class="menu" onclick="toggleMenu()">☰</div>
+
+  <h2>Saved Device</h2>
+  <div class="card" id="savedDevice">Detecting...</div>
+
+  <input id="deviceInput" placeholder="Search device (eg: Vivo)">
+  <button onclick="showSensi()">Get Sensitivity</button>
+
+  <div id="result"></div>
+
+  <button onclick="buyPremium()">👑 Unlock Pro Sensitivity</button>
+</div>
+
+<!-- ================= SIDE MENU ================= -->
+<div id="sideMenu">
+  <p>Account Info</p>
+  <p>Settings</p>
+  <p onclick="logout()">Sign Out</p>
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+  let isPremium = false;
+  let menuOpen = false;
+
+  function login() {
+    document.getElementById("login").classList.remove("active");
+    document.getElementById("home").classList.add("active");
+    detectDevice();
+  }
+
+  function logout() {
+    document.getElementById("home").classList.remove("active");
+    document.getElementById("login").classList.add("active");
+  }
+
+  function googleLogin() {
+    alert("Google login demo (Firebase can be added later)");
+    login();
+  }
+
+  function toggleMenu() {
+    document.getElementById("sideMenu").style.left =
+      menuOpen ? "-220px" : "0";
+    menuOpen = !menuOpen;
+  }
+
+  function detectDevice() {
+    let ua = navigator.userAgent.toLowerCase();
+    let device = "Unknown Device";
+
+    if (ua.includes("vivo")) device = "Vivo Device";
+    else if (ua.includes("redmi") || ua.includes("xiaomi")) device = "Redmi / Xiaomi";
+    else if (ua.includes("samsung")) device = "Samsung Device";
+    else if (ua.includes("realme")) device = "Realme Device";
+
+    document.getElementById("savedDevice").innerText = device;
+  }
+
+  function showSensi() {
+    let input = document.getElementById("deviceInput").value;
+    let result = document.getElementById("result");
+
+    if (!isPremium) {
+      result.innerText = "🔒 Premium required for advanced sensitivity";
+      return;
+    }
+
+    result.innerText =
+      "Sensitivity for " + input + "\n\n" +
+      "General: 90\n" +
+      "Red Dot: 85\n" +
+      "2x Scope: 75\n" +
+      "4x Scope: 65\n" +
+      "AWM: 50\n" +
+      "Free Look: 60";
+  }
+
+  function buyPremium() {
+    alert("Demo premium unlocked");
+    isPremium = true;
+  }
+</script>
+
+</body>
+</html>
